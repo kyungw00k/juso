@@ -133,6 +133,15 @@ results, err := juso.SearchWithOptions(ctx, "강남역", &juso.Options{
 juso tool-schema
 ```
 
+## Claude Code Skill
+
+AI 에이전트가 juso를 자동으로 활용할 수 있는 Claude Code 스킬이 제공됩니다.
+
+```
+/plugin marketplace add kyungw00k/skills
+/plugin install cli-tools@kyungw00k-skills
+```
+
 ## 문서
 
 [https://kyungw00k.dev/juso/](https://kyungw00k.dev/juso/)
