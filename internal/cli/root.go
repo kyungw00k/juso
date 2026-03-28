@@ -29,12 +29,12 @@ var rootCmd = &cobra.Command{
 	Long:    i18n.T(i18n.MsgRootLong),
 	Version: Version,
 	Args:    cobra.ArbitraryArgs,
-	Example: `  juso 강남역
-  juso gangnam --lang en
+	Example: `  juso 테헤란로
+  juso 판교역로 --lang en
   juso 역삼동 --jibun
-  juso 강남역 --lang all
-  juso 강남역 -o json
-  juso 강남역 -o csv > results.csv`,
+  juso 강남대로 --lang all
+  juso 강남대로 -o json
+  juso 테헤란로 -o csv > results.csv`,
 	RunE: runSearch,
 }
 

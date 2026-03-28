@@ -2,6 +2,8 @@
 
 키워드로 한국 우편번호와 주소를 검색하는 CLI 도구이자 Go 라이브러리입니다.
 
+![demo](docs/demo.gif)
+
 ## 설치
 
 ### Homebrew
@@ -25,29 +27,29 @@ curl -fsSL https://kyungw00k.dev/juso/install.sh | sh
 ## 사용법
 
 ```bash
-juso 강남역                      # 우편번호 검색
-juso 강남역 --lang en            # 영문 주소 출력
-juso 강남역 --lang all           # 한/영 동시 출력
-juso 역삼동 --jibun              # 지번 주소 출력
-juso 강남역 -o json              # JSON 출력
-juso 강남역 -o csv > results.csv # CSV 내보내기
+juso 테헤란로                      # 우편번호 검색
+juso 판교역로 --lang en            # 영문 주소 출력
+juso 강남대로 --lang all           # 한/영 동시 출력
+juso 역삼동 --jibun                # 지번 주소 출력
+juso 테헤란로 -o json              # JSON 출력
+juso 테헤란로 -o csv > results.csv # CSV 내보내기
 ```
 
 ### 출력 예시
 
 ```
-$ juso 강남역
+$ juso 테헤란로
 우편번호  주소
-06252     서울특별시 강남구 강남대로 328
-06232     서울특별시 강남구 강남대로 지하 396
-06253     서울특별시 강남구 강남대로66길 14
-06234     서울특별시 강남구 테헤란로10길 10 (강남역 우정에쉐르)
+06134     서울특별시 강남구 테헤란로 101
+06134     서울특별시 강남구 테헤란로 103
+06232     서울특별시 강남구 테헤란로 108
+06142     서울특별시 강남구 테헤란로 110
 
-$ juso 강남역 --lang en
+$ juso 테헤란로 --lang en
 우편번호  주소
-06252     328, Gangnam-daero, Gangnam-gu, Seoul
-06232     Jiha 396, Gangnam-daero, Gangnam-gu, Seoul
-06253     14, Gangnam-daero 66-gil, Gangnam-gu, Seoul
+06134     101, Teheran-ro, Gangnam-gu, Seoul
+06134     103, Teheran-ro, Gangnam-gu, Seoul
+06232     108, Teheran-ro, Gangnam-gu, Seoul
 ```
 
 ## CLI 옵션
