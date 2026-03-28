@@ -1,0 +1,8 @@
+{
+  "name": "juso",
+  "version": "1.0.0",
+  "description": "한국 우편번호 검색 — Korean postal code lookup via juso CLI",
+  "author": "kyungw00k",
+  "homepage": "https://github.com/kyungw00k/juso",
+  "license": "MIT"
+}
