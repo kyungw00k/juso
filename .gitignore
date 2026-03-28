@@ -31,4 +31,6 @@ go.work.sum
 # OS
 .DS_Store
 Thumbs.db
-.claude/
+.claude/state/
+.claude/memory/
+.claude/sessions/
