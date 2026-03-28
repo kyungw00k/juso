@@ -1,4 +1,4 @@
-package kozip
+package juso
 
 import (
 	"fmt"

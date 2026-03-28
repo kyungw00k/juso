@@ -1,7 +1,7 @@
 package cli
 
 import (
-	"github.com/kyungw00k/kozip/internal/i18n"
+	"github.com/kyungw00k/juso/internal/i18n"
 	"github.com/spf13/cobra"
 )
 

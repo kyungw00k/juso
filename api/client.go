@@ -9,14 +9,14 @@ import (
 	"net/url"
 	"time"
 
-	kozip "github.com/kyungw00k/kozip"
+	juso "github.com/kyungw00k/juso"
 	"golang.org/x/text/unicode/norm"
 )
 
 const (
 	baseURL   = "https://api.poesis.kr/post/search.php"
 	timeout   = 10 * time.Second
-	userAgent = "kozip-cli"
+	userAgent = "juso-cli"
 )
 
 type Client struct {
@@ -29,7 +29,7 @@ func NewClient() *Client {
 	}
 }
 
-func (c *Client) Search(ctx context.Context, keyword string) ([]kozip.AddressResult, error) {
+func (c *Client) Search(ctx context.Context, keyword string) ([]juso.AddressResult, error) {
 	normalized := norm.NFC.String(keyword)
 	u := fmt.Sprintf("%s?q=%s", baseURL, url.QueryEscape(normalized))
 
@@ -57,7 +57,7 @@ func (c *Client) Search(ctx context.Context, keyword string) ([]kozip.AddressRes
 		}
 	}
 
-	var apiResp kozip.ApiResponse
+	var apiResp juso.ApiResponse
 	if err := json.Unmarshal(body, &apiResp); err != nil {
 		return nil, err
 	}
@@ -66,7 +66,7 @@ func (c *Client) Search(ctx context.Context, keyword string) ([]kozip.AddressRes
 		return nil, &APIError{Message: apiResp.Error}
 	}
 
-	results := make([]kozip.AddressResult, len(apiResp.Results))
+	results := make([]juso.AddressResult, len(apiResp.Results))
 	for i, r := range apiResp.Results {
 		results[i] = r.ToAddressResult()
 	}

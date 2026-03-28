@@ -1,4 +1,4 @@
-# kozip
+# juso
 
 키워드로 한국 우편번호와 주소를 검색하는 CLI 도구이자 Go 라이브러리입니다.
 
@@ -7,43 +7,43 @@
 ### Homebrew
 
 ```bash
-brew install kyungw00k/cli/kozip
+brew install kyungw00k/cli/juso
 ```
 
 ### Go
 
 ```bash
-go install github.com/kyungw00k/kozip/cmd/kozip@latest
+go install github.com/kyungw00k/juso/cmd/juso@latest
 ```
 
 ### Shell Script
 
 ```bash
-curl -fsSL https://kyungw00k.dev/kozip/install.sh | sh
+curl -fsSL https://kyungw00k.dev/juso/install.sh | sh
 ```
 
 ## 사용법
 
 ```bash
-kozip 강남역                      # 우편번호 검색
-kozip 강남역 --lang en            # 영문 주소 출력
-kozip 강남역 --lang all           # 한/영 동시 출력
-kozip 역삼동 --jibun              # 지번 주소 출력
-kozip 강남역 -o json              # JSON 출력
-kozip 강남역 -o csv > results.csv # CSV 내보내기
+juso 강남역                      # 우편번호 검색
+juso 강남역 --lang en            # 영문 주소 출력
+juso 강남역 --lang all           # 한/영 동시 출력
+juso 역삼동 --jibun              # 지번 주소 출력
+juso 강남역 -o json              # JSON 출력
+juso 강남역 -o csv > results.csv # CSV 내보내기
 ```
 
 ### 출력 예시
 
 ```
-$ kozip 강남역
+$ juso 강남역
 우편번호  주소
 06252     서울특별시 강남구 강남대로 328
 06232     서울특별시 강남구 강남대로 지하 396
 06253     서울특별시 강남구 강남대로66길 14
 06234     서울특별시 강남구 테헤란로10길 10 (강남역 우정에쉐르)
 
-$ kozip 강남역 --lang en
+$ juso 강남역 --lang en
 우편번호  주소
 06252     328, Gangnam-daero, Gangnam-gu, Seoul
 06232     Jiha 396, Gangnam-daero, Gangnam-gu, Seoul
@@ -71,12 +71,12 @@ $ kozip 강남역 --lang en
 ### 서브커맨드
 
 ```bash
-kozip cache stats        # 캐시 통계 (건수, 크기)
-kozip cache clear        # 캐시 전체 삭제
-kozip tool-schema        # AI Agent용 JSON Schema 출력
-kozip tool-schema search # 검색 명령어 Schema만
-kozip update             # 최신 버전으로 업데이트
-kozip update --check     # 업데이트 확인만
+juso cache stats        # 캐시 통계 (건수, 크기)
+juso cache clear        # 캐시 전체 삭제
+juso tool-schema        # AI Agent용 JSON Schema 출력
+juso tool-schema search # 검색 명령어 Schema만
+juso update             # 최신 버전으로 업데이트
+juso update --check     # 업데이트 확인만
 ```
 
 ## 캐시
@@ -84,16 +84,16 @@ kozip update --check     # 업데이트 확인만
 검색 결과는 SQLite에 로컬 캐시됩니다 (TTL: 24시간).
 
 캐시 경로 우선순위:
-1. `$XDG_CACHE_HOME/kozip/cache.db`
-2. `~/.cache/kozip/cache.db` (`~/.cache` 존재 시)
-3. `~/.kozip/cache.db`
+1. `$XDG_CACHE_HOME/juso/cache.db`
+2. `~/.cache/juso/cache.db` (`~/.cache` 존재 시)
+3. `~/.juso/cache.db`
 
 ## 라이브러리로 사용
 
 ```go
-import "github.com/kyungw00k/kozip"
+import "github.com/kyungw00k/juso"
 
-results, err := kozip.Search(ctx, "강남역")
+results, err := juso.Search(ctx, "강남역")
 for _, r := range results {
     fmt.Println(r.Postcode5, r.KoAddress)
     fmt.Println(r.EnAddress)
@@ -104,7 +104,7 @@ for _, r := range results {
 ### 옵션 지정
 
 ```go
-results, err := kozip.SearchWithOptions(ctx, "강남역", &kozip.Options{
+results, err := juso.SearchWithOptions(ctx, "강남역", &juso.Options{
     Timeout: 5 * time.Second,
 })
 ```
@@ -128,13 +128,20 @@ results, err := kozip.SearchWithOptions(ctx, "강남역", &kozip.Options{
 `tool-schema` 명령으로 JSON Schema를 내보내 LLM/MCP 도구로 사용할 수 있습니다.
 
 ```bash
-kozip tool-schema
+juso tool-schema
 ```
 
 ## 문서
 
-[https://kyungw00k.dev/kozip/](https://kyungw00k.dev/kozip/)
+[https://kyungw00k.dev/juso/](https://kyungw00k.dev/juso/)
+
+## Credits
+
+주소 데이터는 [Postcodify](https://www.poesis.dev/postcodify/) API를 통해 제공됩니다.
+Postcodify는 [poesis](https://github.com/poesis/postcodify)가 개발한 한국 우편번호 검색 엔진입니다.
 
 ## License
 
 MIT
+
+juso는 Postcodify의 HTTP API를 호출하며, Postcodify 소스코드를 포함하거나 배포하지 않습니다.

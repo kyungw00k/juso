@@ -3,8 +3,8 @@ package cli
 import (
 	"fmt"
 
-	"github.com/kyungw00k/kozip/cache"
-	"github.com/kyungw00k/kozip/internal/i18n"
+	"github.com/kyungw00k/juso/cache"
+	"github.com/kyungw00k/juso/internal/i18n"
 	"github.com/spf13/cobra"
 )
 

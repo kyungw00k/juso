@@ -22,14 +22,14 @@ type Cache struct {
 
 func dbPath() string {
 	if xdg := os.Getenv("XDG_CACHE_HOME"); xdg != "" {
-		return filepath.Join(xdg, "kozip", "cache.db")
+		return filepath.Join(xdg, "juso", "cache.db")
 	}
 	home, _ := os.UserHomeDir()
 	dotCache := filepath.Join(home, ".cache")
 	if info, err := os.Stat(dotCache); err == nil && info.IsDir() {
-		return filepath.Join(dotCache, "kozip", "cache.db")
+		return filepath.Join(dotCache, "juso", "cache.db")
 	}
-	return filepath.Join(home, ".kozip", "cache.db")
+	return filepath.Join(home, ".juso", "cache.db")
 }
 
 func Open() (*Cache, error) {

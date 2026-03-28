@@ -1,4 +1,4 @@
-module github.com/kyungw00k/kozip
+module github.com/kyungw00k/juso
 
 go 1.25.1
 

@@ -1,10 +1,10 @@
 ---
-name: kozip
+name: juso
 description: Korean postal code and address lookup. Search by keyword, get postcode + Korean/English road/jibun addresses + map URLs.
 version: 1.0.0
 ---
 
-# kozip — 한국 우편번호 검색
+# juso — 한국 우편번호 검색
 
 키워드로 한국 우편번호와 주소(도로명/지번, 한/영)를 검색합니다.
 
@@ -20,10 +20,10 @@ version: 1.0.0
 | -o | string | X | auto | 출력 형식: auto, table, json, jsonl, csv |
 
 예시:
-- `kozip 강남역` — 강남역 관련 주소 검색
-- `kozip gangnam --lang en` — 영문 주소로 검색
-- `kozip 역삼동 --jibun` — 지번 주소 출력
-- `kozip 강남역 -o json` — JSON 형식 출력
+- `juso 강남역` — 강남역 관련 주소 검색
+- `juso gangnam --lang en` — 영문 주소로 검색
+- `juso 역삼동 --jibun` — 지번 주소 출력
+- `juso 강남역 -o json` — JSON 형식 출력
 
 ### 응답 필드
 
@@ -40,10 +40,10 @@ version: 1.0.0
 
 ### 캐시 관리
 
-- `kozip cache stats` — 캐시 통계 (건수, 크기)
-- `kozip cache clear` — 캐시 전체 삭제
+- `juso cache stats` — 캐시 통계 (건수, 크기)
+- `juso cache clear` — 캐시 전체 삭제
 
 ### JSON Schema
 
-- `kozip tool-schema` — 전체 명령어 JSON Schema
-- `kozip tool-schema search` — 검색 명령어 Schema만
+- `juso tool-schema` — 전체 명령어 JSON Schema
+- `juso tool-schema search` — 검색 명령어 Schema만

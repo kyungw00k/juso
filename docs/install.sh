@@ -1,8 +1,8 @@
 #!/bin/sh
 set -e
 
-REPO="kyungw00k/kozip"
-BINARY="kozip"
+REPO="kyungw00k/juso"
+BINARY="juso"
 INSTALL_DIR="${INSTALL_DIR:-$HOME/.local/bin}"
 
 OS=$(uname -s | tr '[:upper:]' '[:lower:]')

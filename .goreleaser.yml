@@ -1,0 +1,58 @@
+version: 2
+
+project_name: juso
+
+before:
+  hooks:
+    - go mod tidy
+    - go test ./...
+
+builds:
+  - main: ./cmd/juso
+    binary: juso
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - -s -w
+      - -X github.com/kyungw00k/juso/internal/cli.Version={{.Version}}
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+
+archives:
+  - format: tar.gz
+    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
+    format_overrides:
+      - goos: windows
+        format: zip
+
+checksum:
+  name_template: "checksums.txt"
+
+changelog:
+  use: github-native
+
+brews:
+  - repository:
+      owner: kyungw00k
+      name: homebrew-cli
+      token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
+    homepage: "https://github.com/kyungw00k/juso"
+    description: "Korean postal code lookup CLI"
+    license: "MIT"
+    install: |
+      bin.install "juso"
+    test: |
+      assert_match "juso version", shell_output("#{bin}/juso --version")
+
+release:
+  github:
+    owner: kyungw00k
+    name: juso
+  draft: false
+  prerelease: auto
+  name_template: "v{{.Version}}"

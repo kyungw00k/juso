@@ -83,7 +83,7 @@ func TestDbPath_XDG(t *testing.T) {
 	defer os.Unsetenv("XDG_CACHE_HOME")
 
 	got := dbPath()
-	want := filepath.Join("/tmp/xdg", "kozip", "cache.db")
+	want := filepath.Join("/tmp/xdg", "juso", "cache.db")
 	if got != want {
 		t.Errorf("dbPath() = %q, want %q", got, want)
 	}

@@ -1,4 +1,4 @@
-package kozip
+package juso
 
 import (
 	"context"
@@ -51,7 +51,7 @@ func SearchWithOptions(ctx context.Context, keyword string, opts *Options) ([]Ad
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Set("User-Agent", "kozip-go")
+	req.Header.Set("User-Agent", "juso-go")
 
 	resp, err := client.Do(req)
 	if err != nil {

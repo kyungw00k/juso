@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/kyungw00k/kozip/internal/i18n"
+	"github.com/kyungw00k/juso/internal/i18n"
 	"github.com/spf13/cobra"
 )
 
@@ -29,7 +29,7 @@ type toolSchemaParameters struct {
 
 var schemas = []toolSchema{
 	{
-		Name:        "kozip_search",
+		Name:        "juso_search",
 		Description: "Search Korean postal codes and addresses by keyword. Returns postcode, Korean/English road and jibun addresses, building name, and map URLs.",
 		Parameters: &toolSchemaParameters{
 			Type: "object",
@@ -43,11 +43,11 @@ var schemas = []toolSchema{
 		},
 	},
 	{
-		Name:        "kozip_cache_clear",
+		Name:        "juso_cache_clear",
 		Description: "Clear the local address search cache.",
 	},
 	{
-		Name:        "kozip_cache_stats",
+		Name:        "juso_cache_stats",
 		Description: "Show cache statistics: number of cached entries and database file size.",
 	},
 }
@@ -61,7 +61,7 @@ var toolSchemaCmd = &cobra.Command{
 		var out interface{}
 
 		if len(args) == 1 {
-			name := "kozip_" + args[0]
+			name := "juso_" + args[0]
 			for _, s := range schemas {
 				if s.Name == name {
 					out = s

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>kozip — 한국 우편번호 검색 CLI</title>
+  <title>juso — 한국 우편번호 검색 CLI</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -293,13 +293,13 @@
 <!-- Nav -->
 <nav>
   <div class="container">
-    <span class="logo"><span>ko</span>zip</span>
+    <span class="logo"><span>ju</span>so</span>
     <ul>
       <li><a href="#install">설치</a></li>
       <li><a href="#quickstart">사용법</a></li>
       <li><a href="#features">기능</a></li>
       <li><a href="#library">라이브러리</a></li>
-      <li><a href="https://github.com/kyungw00k/kozip" target="_blank" rel="noopener">GitHub</a></li>
+      <li><a href="https://github.com/kyungw00k/juso" target="_blank" rel="noopener">GitHub</a></li>
     </ul>
   </div>
 </nav>
@@ -308,11 +308,11 @@
 <section class="hero">
   <div class="container">
     <div class="badge">Go CLI &amp; Library · MIT License</div>
-    <h1>kozip</h1>
+    <h1>juso</h1>
     <p class="subtitle">키워드로 한국 우편번호를 검색하세요.<br>도로명 · 지번 주소, 한/영, JSON/CSV 출력 지원.</p>
     <div class="cta-group">
       <a class="btn btn-primary" href="#install">시작하기</a>
-      <a class="btn btn-secondary" href="https://github.com/kyungw00k/kozip" target="_blank" rel="noopener">
+      <a class="btn btn-secondary" href="https://github.com/kyungw00k/juso" target="_blank" rel="noopener">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
         GitHub
       </a>
@@ -333,17 +333,17 @@
 
     <div class="tab-panel active" id="tab-brew">
       <pre><span class="tok-comment"># Homebrew (macOS / Linux)</span>
-<span class="tok-cmd">brew</span> install kyungw00k/cli/kozip</pre>
+<span class="tok-cmd">brew</span> install kyungw00k/cli/juso</pre>
     </div>
 
     <div class="tab-panel" id="tab-go">
       <pre><span class="tok-comment"># Go 1.21 이상 필요</span>
-<span class="tok-cmd">go</span> install github.com/kyungw00k/kozip/cmd/kozip@latest</pre>
+<span class="tok-cmd">go</span> install github.com/kyungw00k/juso/cmd/juso@latest</pre>
     </div>
 
     <div class="tab-panel" id="tab-shell">
       <pre><span class="tok-comment"># OS/아키텍처 자동 감지 — macOS · Linux · amd64 · arm64</span>
-<span class="tok-cmd">curl</span> <span class="tok-flag">-fsSL</span> https://kyungw00k.dev/kozip/install.sh | sh</pre>
+<span class="tok-cmd">curl</span> <span class="tok-flag">-fsSL</span> https://kyungw00k.dev/juso/install.sh | sh</pre>
       <p style="margin-top:12px; font-size:0.85rem; color:var(--text-muted);">
         설치 경로를 변경하려면: <code>INSTALL_DIR=/usr/local/bin curl -fsSL … | sh</code>
       </p>
@@ -357,34 +357,34 @@
     <h2>빠른 시작</h2>
     <div class="qs-grid">
       <div class="qs-item">
-        <code>kozip 강남역</code>
+        <code>juso 강남역</code>
         <span class="qs-desc">키워드로 우편번호 + 도로명 주소 검색</span>
       </div>
       <div class="qs-item">
-        <code>kozip gangnam --lang en</code>
+        <code>juso gangnam --lang en</code>
         <span class="qs-desc">영문 주소로 검색 및 출력</span>
       </div>
       <div class="qs-item">
-        <code>kozip 역삼동 --jibun</code>
+        <code>juso 역삼동 --jibun</code>
         <span class="qs-desc">지번 주소 표시</span>
       </div>
       <div class="qs-item">
-        <code>kozip 강남역 --lang all</code>
+        <code>juso 강남역 --lang all</code>
         <span class="qs-desc">한국어 + 영문 주소 모두 출력</span>
       </div>
       <div class="qs-item">
-        <code>kozip 강남역 -o json</code>
+        <code>juso 강남역 -o json</code>
         <span class="qs-desc">JSON 형식으로 출력</span>
       </div>
       <div class="qs-item">
-        <code>kozip 강남역 -o csv &gt; results.csv</code>
+        <code>juso 강남역 -o csv &gt; results.csv</code>
         <span class="qs-desc">CSV로 내보내기</span>
       </div>
     </div>
 
     <div style="margin-top:32px;">
       <h3>출력 예시</h3>
-      <pre><span class="tok-comment">$ kozip 강남역</span>
+      <pre><span class="tok-comment">$ juso 강남역</span>
 
 <span class="tok-builtin">우편번호   주소</span>
 ──────────────────────────────────────────────────
@@ -438,11 +438,11 @@
   <div class="container">
     <h2>라이브러리로 사용하기</h2>
     <p style="color:var(--text-muted); margin-bottom:20px;">
-      kozip을 Go 모듈로 임포트해 프로그램에서 직접 우편번호를 검색할 수 있습니다.
+      juso를 Go 모듈로 임포트해 프로그램에서 직접 우편번호를 검색할 수 있습니다.
     </p>
 
     <h3>패키지 추가</h3>
-    <pre><span class="tok-cmd">go</span> get github.com/kyungw00k/kozip</pre>
+    <pre><span class="tok-cmd">go</span> get github.com/kyungw00k/juso</pre>
 
     <div style="margin-top:24px;">
       <h3>예시 코드</h3>
@@ -450,13 +450,13 @@
     <span class="tok-string">"context"</span>
     <span class="tok-string">"fmt"</span>
 
-    <span class="tok-string">"github.com/kyungw00k/kozip"</span>
+    <span class="tok-string">"github.com/kyungw00k/juso"</span>
 )
 
 <span class="tok-keyword">func</span> <span class="tok-builtin">main</span>() {
     ctx := context.<span class="tok-builtin">Background</span>()
 
-    results, err := kozip.<span class="tok-builtin">Search</span>(ctx, <span class="tok-string">"강남역"</span>)
+    results, err := juso.<span class="tok-builtin">Search</span>(ctx, <span class="tok-string">"강남역"</span>)
     <span class="tok-keyword">if</span> err != <span class="tok-keyword">nil</span> {
         <span class="tok-builtin">panic</span>(err)
     }
@@ -470,19 +470,19 @@
     <div style="margin-top:24px;">
       <h3>캐시 관리</h3>
       <pre><span class="tok-comment"># 캐시 상태 확인</span>
-<span class="tok-cmd">kozip</span> cache stats
+<span class="tok-cmd">juso</span> cache stats
 
 <span class="tok-comment"># 캐시 초기화</span>
-<span class="tok-cmd">kozip</span> cache clear</pre>
+<span class="tok-cmd">juso</span> cache clear</pre>
     </div>
 
     <div style="margin-top:24px;">
       <h3>AI 에이전트용 JSON Schema</h3>
       <pre><span class="tok-comment"># 전체 명령어 스키마</span>
-<span class="tok-cmd">kozip</span> tool-schema
+<span class="tok-cmd">juso</span> tool-schema
 
 <span class="tok-comment"># 검색 명령어 스키마만</span>
-<span class="tok-cmd">kozip</span> tool-schema search</pre>
+<span class="tok-cmd">juso</span> tool-schema search</pre>
     </div>
   </div>
 </section>
@@ -491,9 +491,9 @@
 <footer>
   <div class="container">
     <div class="footer-links">
-      <a href="https://github.com/kyungw00k/kozip" target="_blank" rel="noopener">GitHub</a>
-      <a href="https://github.com/kyungw00k/kozip/releases" target="_blank" rel="noopener">Releases</a>
-      <a href="https://github.com/kyungw00k/kozip/issues" target="_blank" rel="noopener">Issues</a>
+      <a href="https://github.com/kyungw00k/juso" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://github.com/kyungw00k/juso/releases" target="_blank" rel="noopener">Releases</a>
+      <a href="https://github.com/kyungw00k/juso/issues" target="_blank" rel="noopener">Issues</a>
       <a href="skill.md">AI Skill</a>
     </div>
     <p>MIT License &copy; <a href="https://github.com/kyungw00k" target="_blank" rel="noopener">kyungw00k</a></p>

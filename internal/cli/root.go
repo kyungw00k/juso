@@ -7,11 +7,11 @@ import (
 	"strings"
 	"unicode"
 
-	kozip "github.com/kyungw00k/kozip"
-	"github.com/kyungw00k/kozip/api"
-	"github.com/kyungw00k/kozip/cache"
-	"github.com/kyungw00k/kozip/internal/i18n"
-	"github.com/kyungw00k/kozip/internal/output"
+	juso "github.com/kyungw00k/juso"
+	"github.com/kyungw00k/juso/api"
+	"github.com/kyungw00k/juso/cache"
+	"github.com/kyungw00k/juso/internal/i18n"
+	"github.com/kyungw00k/juso/internal/output"
 	"github.com/spf13/cobra"
 )
 
@@ -24,17 +24,17 @@ var (
 )
 
 var rootCmd = &cobra.Command{
-	Use:     "kozip <keyword>",
+	Use:     "juso <keyword>",
 	Short:   i18n.T(i18n.MsgRootShort),
 	Long:    i18n.T(i18n.MsgRootLong),
 	Version: Version,
 	Args:    cobra.ArbitraryArgs,
-	Example: `  kozip 강남역
-  kozip gangnam --lang en
-  kozip 역삼동 --jibun
-  kozip 강남역 --lang all
-  kozip 강남역 -o json
-  kozip 강남역 -o csv > results.csv`,
+	Example: `  juso 강남역
+  juso gangnam --lang en
+  juso 역삼동 --jibun
+  juso 강남역 --lang all
+  juso 강남역 -o json
+  juso 강남역 -o csv > results.csv`,
 	RunE: runSearch,
 }
 
@@ -77,7 +77,7 @@ func runSearch(cmd *cobra.Command, args []string) error {
 	}
 	defer c.Close()
 
-	var results []kozip.AddressResult
+	var results []juso.AddressResult
 
 	if data, ok := c.Get(keyword); ok {
 		if err := json.Unmarshal(data, &results); err != nil {
@@ -137,11 +137,11 @@ func isASCII(s string) bool {
 	return true
 }
 
-func prepareOutput(results []kozip.AddressResult) []kozip.AddressResult {
+func prepareOutput(results []juso.AddressResult) []juso.AddressResult {
 	if !flagJibun {
 		return results
 	}
-	out := make([]kozip.AddressResult, len(results))
+	out := make([]juso.AddressResult, len(results))
 	for i, r := range results {
 		out[i] = r
 		out[i].KoAddress = r.KoJibun

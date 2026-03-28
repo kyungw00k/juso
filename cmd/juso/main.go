@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/kyungw00k/kozip/api"
-	"github.com/kyungw00k/kozip/internal/cli"
+	"github.com/kyungw00k/juso/api"
+	"github.com/kyungw00k/juso/internal/cli"
 )
 
 func main() {

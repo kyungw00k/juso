@@ -14,7 +14,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/kyungw00k/kozip/internal/i18n"
+	"github.com/kyungw00k/juso/internal/i18n"
 	"github.com/spf13/cobra"
 )
 
@@ -58,7 +58,7 @@ var updateCmd = &cobra.Command{
 			return nil
 		}
 
-		assetName := fmt.Sprintf("kozip_%s_%s", runtime.GOOS, runtime.GOARCH)
+		assetName := fmt.Sprintf("juso_%s_%s", runtime.GOOS, runtime.GOARCH)
 		var downloadURL string
 		for _, a := range rel.Assets {
 			if strings.Contains(a.Name, assetName) && strings.HasSuffix(a.Name, ".tar.gz") {
@@ -79,7 +79,7 @@ var updateCmd = &cobra.Command{
 			return err
 		}
 
-		tmpDir, err := os.MkdirTemp("", "kozip-update-*")
+		tmpDir, err := os.MkdirTemp("", "juso-update-*")
 		if err != nil {
 			return err
 		}
@@ -90,7 +90,7 @@ var updateCmd = &cobra.Command{
 			return err
 		}
 
-		newBin := filepath.Join(tmpDir, "kozip")
+		newBin := filepath.Join(tmpDir, "juso")
 		backup := exe + ".bak"
 
 		os.Rename(exe, backup)
@@ -112,7 +112,7 @@ func init() {
 
 func fetchLatestRelease(ctx context.Context) (*ghRelease, error) {
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet,
-		"https://api.github.com/repos/kyungw00k/kozip/releases/latest", nil)
+		"https://api.github.com/repos/kyungw00k/juso/releases/latest", nil)
 	if err != nil {
 		return nil, err
 	}
