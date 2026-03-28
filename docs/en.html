@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>juso — Korean postal code lookup CLI &amp; Go library</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --bg-card: #161b22;
+      --border: #30363d;
+      --text: #e6edf3;
+      --text-muted: #8b949e;
+      --accent: #58a6ff;
+      --green: #3fb950;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+    .container { max-width: 800px; margin: 0 auto; padding: 2rem 1.5rem; }
+    h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+    h1 span { color: var(--accent); }
+    .tagline { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 2rem; }
+    .lang-switch { float: right; font-size: 0.9rem; }
+    .badges { margin-bottom: 1.5rem; }
+    .badges img { height: 20px; margin-right: 6px; }
+    .demo { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 2rem; }
+    .demo img { width: 100%; display: block; }
+    .section { margin-bottom: 2rem; }
+    .section h2 { font-size: 1.3rem; margin-bottom: 0.75rem; color: var(--accent); }
+    pre { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; overflow-x: auto; font-size: 0.9rem; margin-bottom: 0.75rem; font-family: 'SF Mono', SFMono-Regular, Consolas, monospace; }
+    code { font-family: 'SF Mono', SFMono-Regular, Consolas, monospace; color: var(--green); }
+    .grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1rem; margin-bottom: 2rem; }
+    @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
+    .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; }
+    .card h3 { font-size: 1rem; margin-bottom: 0.5rem; }
+    .card p { color: var(--text-muted); font-size: 0.9rem; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .footer { color: var(--text-muted); font-size: 0.85rem; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); text-align: center; }
+    .footer a { color: var(--text-muted); }
+    .footer a:hover { color: var(--accent); }
+    .footer-links { display: flex; gap: 1.25rem; justify-content: center; margin-bottom: 0.5rem; flex-wrap: wrap; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <p class="lang-switch"><a href="ko.html">한국어</a></p>
+    <h1><span>juso</span></h1>
+    <p class="tagline">Korean postal code lookup CLI &amp; Go library</p>
+
+    <div class="badges">
+      <a href="https://github.com/kyungw00k/juso/releases"><img src="https://img.shields.io/github/v/release/kyungw00k/juso" alt="Release"></a>
+      <img src="https://img.shields.io/badge/Go-1.21+-00ADD8?logo=go" alt="Go">
+      <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License">
+    </div>
+
+    <div class="demo">
+      <img src="demo.gif" alt="juso CLI demo">
+    </div>
+
+    <div class="section">
+      <h2>Install</h2>
+      <pre><code>brew install kyungw00k/cli/juso</code></pre>
+      <pre><code>go install github.com/kyungw00k/juso/cmd/juso@latest</code></pre>
+      <pre><code>curl -fsSL https://kyungw00k.dev/juso/install.sh | sh</code></pre>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h3>Road &amp; Lot Address Search</h3>
+        <p>Search both road name and lot number addresses by keyword. Use <code>--jibun</code> to display lot addresses.</p>
+      </div>
+      <div class="card">
+        <h3>Bilingual Addresses (Ko/En)</h3>
+        <p>Supports both Korean and English addresses. Select language with <code>--lang ko|en|all</code>.</p>
+      </div>
+      <div class="card">
+        <h3>SQLite Cache (24h TTL)</h3>
+        <p>Caches search results in a local SQLite database for 24 hours to maximize repeated lookup speed.</p>
+      </div>
+      <div class="card">
+        <h3>Multi-format Output (table/json/csv)</h3>
+        <p>Supports Table, JSON, and CSV output. Use <code>-o json</code> or <code>-o csv</code> options.</p>
+      </div>
+      <div class="card">
+        <h3>AI Agent Integration (tool-schema)</h3>
+        <p>Export JSON Schema via the <code>tool-schema</code> subcommand for direct LLM tool-call integration.</p>
+      </div>
+      <div class="card">
+        <h3>Self-update</h3>
+        <p>Automatically update to the latest version with the <code>juso update</code> command.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Quick Start</h2>
+      <pre><code>juso 테헤란로</code></pre>
+      <pre><code>juso 판교역로 --lang en</code></pre>
+      <pre><code>juso 테헤란로 --jibun</code></pre>
+      <pre><code>juso 강남대로 --lang all</code></pre>
+      <pre><code>juso 테헤란로 -o json</code></pre>
+      <pre><code>juso 테헤란로 -o csv > results.csv</code></pre>
+    </div>
+
+    <div class="section">
+      <h2>Library Usage</h2>
+      <pre><code>import "github.com/kyungw00k/juso"
+
+results, err := juso.Search(ctx, "테헤란로")
+for _, r := range results {
+    fmt.Println(r.Postcode5, r.KoAddress)
+}</code></pre>
+    </div>
+
+    <div class="section">
+      <h2>AI Skill</h2>
+      <pre><code>juso tool-schema</code></pre>
+      <pre><code>juso tool-schema search</code></pre>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">
+        Export JSON Schema for LLM/MCP tool calls via the <code>tool-schema</code> subcommand.
+        Integrates directly with Claude Code and AI agents.
+      </p>
+    </div>
+
+    <div class="footer">
+      <div class="footer-links">
+        <a href="https://github.com/kyungw00k/juso">GitHub</a>
+        <a href="https://github.com/kyungw00k/juso/releases">Releases</a>
+        <a href="https://github.com/sponsors/kyungw00k">Sponsor</a>
+        <a href="skill.md">Skill</a>
+      </div>
+      <p>Powered by <a href="https://postcodify.poesis.kr/">Postcodify</a></p>
+      <p style="margin-top: 0.25rem;">MIT License &copy; 2026 kyungw00k</p>
+    </div>
+  </div>
+</body>
+</html>

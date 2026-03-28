@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>juso — 한국 우편번호 검색 CLI &amp; Go 라이브러리</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --bg-card: #161b22;
+      --border: #30363d;
+      --text: #e6edf3;
+      --text-muted: #8b949e;
+      --accent: #58a6ff;
+      --green: #3fb950;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+    .container { max-width: 800px; margin: 0 auto; padding: 2rem 1.5rem; }
+    h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+    h1 span { color: var(--accent); }
+    .tagline { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 2rem; }
+    .lang-switch { float: right; font-size: 0.9rem; }
+    .badges { margin-bottom: 1.5rem; }
+    .badges img { height: 20px; margin-right: 6px; }
+    .demo { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 2rem; }
+    .demo img { width: 100%; display: block; }
+    .section { margin-bottom: 2rem; }
+    .section h2 { font-size: 1.3rem; margin-bottom: 0.75rem; color: var(--accent); }
+    pre { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; overflow-x: auto; font-size: 0.9rem; margin-bottom: 0.75rem; font-family: 'SF Mono', SFMono-Regular, Consolas, monospace; }
+    code { font-family: 'SF Mono', SFMono-Regular, Consolas, monospace; color: var(--green); }
+    .grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1rem; margin-bottom: 2rem; }
+    @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
+    .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; }
+    .card h3 { font-size: 1rem; margin-bottom: 0.5rem; }
+    .card p { color: var(--text-muted); font-size: 0.9rem; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .footer { color: var(--text-muted); font-size: 0.85rem; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); text-align: center; }
+    .footer a { color: var(--text-muted); }
+    .footer a:hover { color: var(--accent); }
+    .footer-links { display: flex; gap: 1.25rem; justify-content: center; margin-bottom: 0.5rem; flex-wrap: wrap; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <p class="lang-switch"><a href="en.html">English</a></p>
+    <h1><span>juso</span></h1>
+    <p class="tagline">한국 우편번호 검색 CLI &amp; Go 라이브러리</p>
+
+    <div class="badges">
+      <a href="https://github.com/kyungw00k/juso/releases"><img src="https://img.shields.io/github/v/release/kyungw00k/juso" alt="Release"></a>
+      <img src="https://img.shields.io/badge/Go-1.21+-00ADD8?logo=go" alt="Go">
+      <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License">
+    </div>
+
+    <div class="demo">
+      <img src="demo.gif" alt="juso CLI 데모">
+    </div>
+
+    <div class="section">
+      <h2>설치</h2>
+      <pre><code>brew install kyungw00k/cli/juso</code></pre>
+      <pre><code>go install github.com/kyungw00k/juso/cmd/juso@latest</code></pre>
+      <pre><code>curl -fsSL https://kyungw00k.dev/juso/install.sh | sh</code></pre>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h3>도로명/지번 주소 검색</h3>
+        <p>키워드로 도로명과 지번 주소를 모두 검색합니다. <code>--jibun</code> 옵션으로 지번 주소를 표시합니다.</p>
+      </div>
+      <div class="card">
+        <h3>한/영 다국어 주소</h3>
+        <p>한국어와 영문 주소를 모두 지원합니다. <code>--lang ko|en|all</code> 옵션으로 언어를 선택합니다.</p>
+      </div>
+      <div class="card">
+        <h3>SQLite 캐시 (24시간 TTL)</h3>
+        <p>검색 결과를 로컬 SQLite DB에 24시간 캐싱해 반복 조회 속도를 극대화합니다.</p>
+      </div>
+      <div class="card">
+        <h3>멀티포맷 출력 (table/json/csv)</h3>
+        <p>Table · JSON · CSV 형식을 지원합니다. <code>-o json</code> 또는 <code>-o csv</code> 옵션을 사용합니다.</p>
+      </div>
+      <div class="card">
+        <h3>AI Agent 연동 (tool-schema)</h3>
+        <p><code>tool-schema</code> 서브커맨드로 JSON Schema를 제공해 LLM 툴콜에 바로 연동됩니다.</p>
+      </div>
+      <div class="card">
+        <h3>셀프 업데이트</h3>
+        <p><code>juso update</code> 명령으로 최신 버전으로 자동 업데이트할 수 있습니다.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>빠른 시작</h2>
+      <pre><code>juso 테헤란로</code></pre>
+      <pre><code>juso 판교역로 --lang en</code></pre>
+      <pre><code>juso 테헤란로 --jibun</code></pre>
+      <pre><code>juso 강남대로 --lang all</code></pre>
+      <pre><code>juso 테헤란로 -o json</code></pre>
+      <pre><code>juso 테헤란로 -o csv > results.csv</code></pre>
+    </div>
+
+    <div class="section">
+      <h2>라이브러리로 사용하기</h2>
+      <pre><code>import "github.com/kyungw00k/juso"
+
+results, err := juso.Search(ctx, "테헤란로")
+for _, r := range results {
+    fmt.Println(r.Postcode5, r.KoAddress)
+}</code></pre>
+    </div>
+
+    <div class="section">
+      <h2>AI 스킬</h2>
+      <pre><code>juso tool-schema</code></pre>
+      <pre><code>juso tool-schema search</code></pre>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">
+        <code>tool-schema</code> 서브커맨드로 LLM/MCP 도구 호출용 JSON Schema를 내보냅니다.
+        Claude Code 및 AI Agent와 바로 연동할 수 있습니다.
+      </p>
+    </div>
+
+    <div class="footer">
+      <div class="footer-links">
+        <a href="https://github.com/kyungw00k/juso">GitHub</a>
+        <a href="https://github.com/kyungw00k/juso/releases">Releases</a>
+        <a href="https://github.com/sponsors/kyungw00k">Sponsor</a>
+        <a href="skill.md">Skill</a>
+      </div>
+      <p>Powered by <a href="https://postcodify.poesis.kr/">Postcodify</a></p>
+      <p style="margin-top: 0.25rem;">MIT License &copy; 2026 kyungw00k</p>
+    </div>
+  </div>
+</body>
+</html>
