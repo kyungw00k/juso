@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>kozip — 한국 우편번호 검색 CLI</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d1117;
+      --bg-card:   #161b22;
+      --bg-code:   #161b22;
+      --border:    #30363d;
+      --text:      #c9d1d9;
+      --text-muted:#8b949e;
+      --accent:    #58a6ff;
+      --accent-dim:#1f6feb;
+      --green:     #3fb950;
+      --yellow:    #d29922;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── Layout ── */
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(13, 17, 23, 0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+    }
+    nav .container {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      padding-top: 14px;
+      padding-bottom: 14px;
+    }
+    nav .logo {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+    nav .logo span { color: var(--accent); }
+    nav ul {
+      display: flex;
+      gap: 20px;
+      list-style: none;
+      margin-left: auto;
+    }
+    nav ul a {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      transition: color 0.15s;
+    }
+    nav ul a:hover { color: var(--text); text-decoration: none; }
+
+    /* ── Hero ── */
+    .hero {
+      padding: 80px 0 64px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero .badge {
+      display: inline-block;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-size: clamp(2.5rem, 8vw, 4rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.1;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #e6edf3 0%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero .subtitle {
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      max-width: 520px;
+      margin: 0 auto 36px;
+    }
+    .hero .cta-group {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 22px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: opacity 0.15s, transform 0.1s;
+      cursor: pointer;
+      border: none;
+    }
+    .btn:hover { opacity: 0.85; text-decoration: none; transform: translateY(-1px); }
+    .btn-primary { background: var(--accent); color: #0d1117; }
+    .btn-secondary { background: var(--bg-card); color: var(--text); border: 1px solid var(--border); }
+
+    /* ── Section ── */
+    section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    section:last-of-type { border-bottom: none; }
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+      color: #e6edf3;
+    }
+    h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 12px;
+    }
+
+    /* ── Code blocks ── */
+    pre {
+      background: var(--bg-code);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px 24px;
+      overflow-x: auto;
+      font-family: "SF Mono", "Fira Code", "Cascadia Code", Consolas, monospace;
+      font-size: 0.875rem;
+      line-height: 1.6;
+    }
+    code {
+      font-family: "SF Mono", "Fira Code", "Cascadia Code", Consolas, monospace;
+      font-size: 0.875em;
+    }
+    p code, li code {
+      background: var(--bg-code);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2px 6px;
+      color: #e6edf3;
+    }
+
+    /* syntax highlight tokens */
+    .tok-comment  { color: var(--text-muted); font-style: italic; }
+    .tok-keyword  { color: #ff7b72; }
+    .tok-string   { color: #a5d6ff; }
+    .tok-builtin  { color: var(--green); }
+    .tok-flag     { color: var(--yellow); }
+    .tok-cmd      { color: var(--accent); }
+
+    /* ── Install tabs ── */
+    .tabs { display: flex; gap: 2px; margin-bottom: -1px; }
+    .tab-btn {
+      padding: 8px 18px;
+      background: transparent;
+      border: 1px solid transparent;
+      border-bottom: none;
+      border-radius: 8px 8px 0 0;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: color 0.15s, background 0.15s;
+    }
+    .tab-btn:hover { color: var(--text); }
+    .tab-btn.active {
+      background: var(--bg-code);
+      border-color: var(--border);
+      color: var(--text);
+    }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+    .tab-panel pre { border-radius: 0 8px 8px 8px; }
+
+    /* ── Quick Start grid ── */
+    .qs-grid {
+      display: grid;
+      gap: 12px;
+    }
+    .qs-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .qs-item code {
+      font-size: 0.9rem;
+      color: var(--accent);
+      background: none;
+      border: none;
+      padding: 0;
+    }
+    .qs-item .qs-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* ── Features grid ── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      transition: border-color 0.2s;
+    }
+    .feature-card:hover { border-color: var(--accent-dim); }
+    .feature-card .icon {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+    .feature-card h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-bottom: 6px;
+    }
+    .feature-card p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    /* ── Footer ── */
+    footer {
+      padding: 36px 0;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+    footer a { color: var(--text-muted); }
+    footer a:hover { color: var(--accent); }
+    footer .footer-links {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+
+    @media (max-width: 600px) {
+      .hero { padding: 56px 0 48px; }
+      h2 { font-size: 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav>
+  <div class="container">
+    <span class="logo"><span>ko</span>zip</span>
+    <ul>
+      <li><a href="#install">설치</a></li>
+      <li><a href="#quickstart">사용법</a></li>
+      <li><a href="#features">기능</a></li>
+      <li><a href="#library">라이브러리</a></li>
+      <li><a href="https://github.com/kyungw00k/kozip" target="_blank" rel="noopener">GitHub</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="container">
+    <div class="badge">Go CLI &amp; Library · MIT License</div>
+    <h1>kozip</h1>
+    <p class="subtitle">키워드로 한국 우편번호를 검색하세요.<br>도로명 · 지번 주소, 한/영, JSON/CSV 출력 지원.</p>
+    <div class="cta-group">
+      <a class="btn btn-primary" href="#install">시작하기</a>
+      <a class="btn btn-secondary" href="https://github.com/kyungw00k/kozip" target="_blank" rel="noopener">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        GitHub
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Install -->
+<section id="install">
+  <div class="container">
+    <h2>설치</h2>
+
+    <div class="tabs" id="install-tabs">
+      <button class="tab-btn active" data-tab="brew">Homebrew</button>
+      <button class="tab-btn" data-tab="go">Go</button>
+      <button class="tab-btn" data-tab="shell">Shell Script</button>
+    </div>
+
+    <div class="tab-panel active" id="tab-brew">
+      <pre><span class="tok-comment"># Homebrew (macOS / Linux)</span>
+<span class="tok-cmd">brew</span> install kyungw00k/cli/kozip</pre>
+    </div>
+
+    <div class="tab-panel" id="tab-go">
+      <pre><span class="tok-comment"># Go 1.21 이상 필요</span>
+<span class="tok-cmd">go</span> install github.com/kyungw00k/kozip/cmd/kozip@latest</pre>
+    </div>
+
+    <div class="tab-panel" id="tab-shell">
+      <pre><span class="tok-comment"># OS/아키텍처 자동 감지 — macOS · Linux · amd64 · arm64</span>
+<span class="tok-cmd">curl</span> <span class="tok-flag">-fsSL</span> https://kyungw00k.dev/kozip/install.sh | sh</pre>
+      <p style="margin-top:12px; font-size:0.85rem; color:var(--text-muted);">
+        설치 경로를 변경하려면: <code>INSTALL_DIR=/usr/local/bin curl -fsSL … | sh</code>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Quick Start -->
+<section id="quickstart">
+  <div class="container">
+    <h2>빠른 시작</h2>
+    <div class="qs-grid">
+      <div class="qs-item">
+        <code>kozip 강남역</code>
+        <span class="qs-desc">키워드로 우편번호 + 도로명 주소 검색</span>
+      </div>
+      <div class="qs-item">
+        <code>kozip gangnam --lang en</code>
+        <span class="qs-desc">영문 주소로 검색 및 출력</span>
+      </div>
+      <div class="qs-item">
+        <code>kozip 역삼동 --jibun</code>
+        <span class="qs-desc">지번 주소 표시</span>
+      </div>
+      <div class="qs-item">
+        <code>kozip 강남역 --lang all</code>
+        <span class="qs-desc">한국어 + 영문 주소 모두 출력</span>
+      </div>
+      <div class="qs-item">
+        <code>kozip 강남역 -o json</code>
+        <span class="qs-desc">JSON 형식으로 출력</span>
+      </div>
+      <div class="qs-item">
+        <code>kozip 강남역 -o csv &gt; results.csv</code>
+        <span class="qs-desc">CSV로 내보내기</span>
+      </div>
+    </div>
+
+    <div style="margin-top:32px;">
+      <h3>출력 예시</h3>
+      <pre><span class="tok-comment">$ kozip 강남역</span>
+
+<span class="tok-builtin">우편번호   주소</span>
+──────────────────────────────────────────────────
+06164      서울특별시 강남구 강남대로 지하 396 (역삼동)
+06232      서울특별시 강남구 테헤란로 지하 211 (역삼동)</pre>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section id="features">
+  <div class="container">
+    <h2>기능</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="icon">🌐</div>
+        <h4>다국어 주소</h4>
+        <p>한국어 · 영문 도로명 / 지번 주소를 모두 지원합니다. <code>--lang ko|en|all</code></p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">⚡</div>
+        <h4>SQLite 캐시</h4>
+        <p>검색 결과를 로컬 SQLite DB에 캐싱해 반복 조회 속도를 극대화합니다.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">📄</div>
+        <h4>멀티포맷 출력</h4>
+        <p>Table · JSON · JSONL · CSV — 파이프라인에 맞는 형식을 선택하세요.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">🤖</div>
+        <h4>AI Agent 지원</h4>
+        <p><code>tool-schema</code> 서브커맨드로 JSON Schema를 제공해 LLM 툴콜에 바로 연동됩니다.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">📦</div>
+        <h4>Go 라이브러리</h4>
+        <p><code>go get</code> 한 줄로 자신의 Go 프로젝트에 우편번호 검색을 내장하세요.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">🗺️</div>
+        <h4>지도 링크</h4>
+        <p>카카오맵 · 네이버지도 URL을 결과에 포함해 바로 확인할 수 있습니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Library Usage -->
+<section id="library">
+  <div class="container">
+    <h2>라이브러리로 사용하기</h2>
+    <p style="color:var(--text-muted); margin-bottom:20px;">
+      kozip을 Go 모듈로 임포트해 프로그램에서 직접 우편번호를 검색할 수 있습니다.
+    </p>
+
+    <h3>패키지 추가</h3>
+    <pre><span class="tok-cmd">go</span> get github.com/kyungw00k/kozip</pre>
+
+    <div style="margin-top:24px;">
+      <h3>예시 코드</h3>
+      <pre><span class="tok-keyword">import</span> (
+    <span class="tok-string">"context"</span>
+    <span class="tok-string">"fmt"</span>
+
+    <span class="tok-string">"github.com/kyungw00k/kozip"</span>
+)
+
+<span class="tok-keyword">func</span> <span class="tok-builtin">main</span>() {
+    ctx := context.<span class="tok-builtin">Background</span>()
+
+    results, err := kozip.<span class="tok-builtin">Search</span>(ctx, <span class="tok-string">"강남역"</span>)
+    <span class="tok-keyword">if</span> err != <span class="tok-keyword">nil</span> {
+        <span class="tok-builtin">panic</span>(err)
+    }
+
+    <span class="tok-keyword">for</span> _, r := <span class="tok-keyword">range</span> results {
+        fmt.<span class="tok-builtin">Printf</span>(<span class="tok-string">"%s  %s\n"</span>, r.Postcode5, r.KoAddress)
+    }
+}</pre>
+    </div>
+
+    <div style="margin-top:24px;">
+      <h3>캐시 관리</h3>
+      <pre><span class="tok-comment"># 캐시 상태 확인</span>
+<span class="tok-cmd">kozip</span> cache stats
+
+<span class="tok-comment"># 캐시 초기화</span>
+<span class="tok-cmd">kozip</span> cache clear</pre>
+    </div>
+
+    <div style="margin-top:24px;">
+      <h3>AI 에이전트용 JSON Schema</h3>
+      <pre><span class="tok-comment"># 전체 명령어 스키마</span>
+<span class="tok-cmd">kozip</span> tool-schema
+
+<span class="tok-comment"># 검색 명령어 스키마만</span>
+<span class="tok-cmd">kozip</span> tool-schema search</pre>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="footer-links">
+      <a href="https://github.com/kyungw00k/kozip" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://github.com/kyungw00k/kozip/releases" target="_blank" rel="noopener">Releases</a>
+      <a href="https://github.com/kyungw00k/kozip/issues" target="_blank" rel="noopener">Issues</a>
+      <a href="skill.md">AI Skill</a>
+    </div>
+    <p>MIT License &copy; <a href="https://github.com/kyungw00k" target="_blank" rel="noopener">kyungw00k</a></p>
+  </div>
+</footer>
+
+<script>
+  // Tab switching
+  const tabsEl = document.getElementById('install-tabs');
+  tabsEl.addEventListener('click', function(e) {
+    const btn = e.target.closest('.tab-btn');
+    if (!btn) return;
+    const tab = btn.dataset.tab;
+
+    tabsEl.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+  });
+</script>
+</body>
+</html>
