@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"unicode"
 
 	kozip "github.com/kyungw00k/kozip"
 	"github.com/kyungw00k/kozip/api"
@@ -65,6 +66,11 @@ func runSearch(cmd *cobra.Command, args []string) error {
 
 	keyword := strings.Join(args, " ")
 
+	// --lang 미지정 시 키워드 언어 자동 감지
+	if !cmd.Flags().Changed("lang") && isASCII(keyword) {
+		flagLang = "en"
+	}
+
 	c, err := cache.Open()
 	if err != nil {
 		return err
@@ -120,6 +126,15 @@ func getColumns() []output.TableColumn {
 			{Header: i18n.T(i18n.HdrAddress), Key: "ko_address"},
 		}
 	}
+}
+
+func isASCII(s string) bool {
+	for _, r := range s {
+		if r > unicode.MaxASCII {
+			return false
+		}
+	}
+	return true
 }
 
 func prepareOutput(results []kozip.AddressResult) []kozip.AddressResult {
