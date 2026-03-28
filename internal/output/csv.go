@@ -29,7 +29,12 @@ func (f *CSVFormatter) Format(data interface{}) error {
 	for _, row := range rows {
 		record := make([]string, len(f.Columns))
 		for i, col := range f.Columns {
-			record[i] = fmt.Sprintf("%v", row[col.Key])
+			v := row[col.Key]
+			if v == nil {
+				record[i] = ""
+			} else {
+				record[i] = fmt.Sprintf("%v", v)
+			}
 		}
 		if err := w.Write(record); err != nil {
 			return err
